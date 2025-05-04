@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .radio-group, .checkbox-group {
+            margin-top: 5px;
+        }
+        .radio-group label, .checkbox-group label {
+            display: inline-block;
+            margin-right: 15px;
+            font-weight: normal;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #2980b9;
+        }
+        .btn-reset {
+            background: #e74c3c;
+        }
+        .btn-reset:hover {
+            background: #c0392b;
+        }
+        .error {
+            color: #e74c3c;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        #employeeInfo {
+            margin-top: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            display: none;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Employee Registration Form</h1>
+        <form id="employeeForm">
+            <div class="form-group">
+                <label for="employeeId">Employee ID:</label>
+                <input type="text" id="employeeId" name="employeeId" placeholder="EMP123">
+                <div id="employeeIdError" class="error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" placeholder="John Doe">
+                <div id="fullNameError" class="error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="john.doe@example.com">
+                <div id="emailError" class="error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="department">Department:</label>
+                <select id="department" name="department">
+                    <option value="">Select Department</option>
+                    <option value="HR">HR</option>
+                    <option value="Sales">Sales</option>
+                    <option value="IT">IT</option>
+                    <option value="Marketing">Marketing</option>
+                </select>
+                <div id="departmentError" class="error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="joiningDate">Joining Date:</label>
+                <input type="date" id="joiningDate" name="joiningDate">
+                <div id="joiningDateError" class="error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label>Gender:</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="gender" value="Male"> Male</label>
+                    <label><input type="radio" name="gender" value="Female"> Female</label>
+                    <label><input type="radio" name="gender" value="Other"> Other</label>
+                </div>
+                <div id="genderError" class="error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label>Employment Type:</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="employmentType" name="employmentType" value="Full-Time"> Full-Time</label>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button type="submit" class="btn">Submit</button>
+                <button type="reset" class="btn btn-reset">Reset</button>
+            </div>
+        </form>
+        
+        <div id="employeeInfo">
+            <h2>Employee Information</h2>
+            <div id="infoContent"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('employeeForm').addEventListener('submit', function(event) {
+            // Prevent default form submission
+            event.preventDefault();
+            
+            // Reset previous errors
+            clearErrors();
+            
+            // Validate form
+            if (validateForm()) {
+                // If validation passes, display employee info
+                displayEmployeeInfo();
+            }
+        });
+        
+        function clearErrors() {
+            const errorElements = document.querySelectorAll('.error');
+            errorElements.forEach(element => {
+                element.textContent = '';
+            });
+        }
+        
+        function validateForm() {
+            let isValid = true;
+            
+            // Validate Employee ID
+            const employeeId = document.getElementById('employeeId').value.trim();
+            const employeeIdRegex = /^EMP\d{3}$/;
+            if (!employeeIdRegex.test(employeeId)) {
+                document.getElementById('employeeIdError').textContent = 'Employee ID must start with EMP followed by 3 digits';
+                isValid = false;
+            }
+            
+            // Validate Full Name
+            const fullName = document.getElementById('fullName').value.trim();
+            const fullNameRegex = /^[a-zA-Z\s]+$/;
+            if (!fullNameRegex.test(fullName)) {
+                document.getElementById('fullNameError').textContent = 'Name should only contain alphabets and spaces';
+                isValid = false;
+            }
+            
+            // Validate Email
+            const email = document.getElementById('email').value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('emailError').textContent = 'Please enter a valid email address';
+                isValid = false;
+            }
+            
+            // Validate Department
+            const department = document.getElementById('department').value;
+            if (department === '') {
+                document.getElementById('departmentError').textContent = 'Please select a department';
+                isValid = false;
+            }
+            
+            // Validate Joining Date
+            const joiningDate = document.getElementById('joiningDate').value;
+            if (joiningDate === '') {
+                document.getElementById('joiningDateError').textContent = 'Please select a joining date';
+                isValid = false;
+            }
+            
+            // Validate Gender
+            const gender = document.querySelector('input[name="gender"]:checked');
+            if (!gender) {
+                document.getElementById('genderError').textContent = 'Please select a gender';
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        function displayEmployeeInfo() {
+            const form = document.getElementById('employeeForm');
+            const employeeId = form.employeeId.value;
+            const fullName = form.fullName.value;
+            const email = form.email.value;
+            const department = form.department.value;
+            const joiningDate = form.joiningDate.value;
+            const gender = form.gender.value;
+            const employmentType = form.employmentType.checked ? 'Full-Time' : 'Part-Time';
+            
+            const infoContent = document.getElementById('infoContent');
+            infoContent.innerHTML = `
+                <p><strong>Employee ID:</strong> ${employeeId}</p>
+                <p><strong>Full Name:</strong> ${fullName}</p>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Department:</strong> ${department}</p>
+                <p><strong>Joining Date:</strong> ${joiningDate}</p>
+                <p><strong>Gender:</strong> ${gender}</p>
+                <p><strong>Employment Type:</strong> ${employmentType}</p>
+            `;
+            
+            document.getElementById('employeeInfo').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
